@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'fs/promises';
 import { v4 as uuidv4 } from 'uuid';
 //City class with name and id properties
 class City {

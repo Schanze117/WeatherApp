@@ -10,16 +10,16 @@ dotenv.config();
     date: string;
     icon: string;
     iconDescription: string;
-    temperature: number;
+    tempF: number;
     humidity: number;
     windSpeed: number;
   
-  constructor(city: string, date: string, icon: string, iconDescription: string, temperature: number, humidity: number, windSpeed: number) {
+  constructor(city: string, date: string, icon: string, iconDescription: string, tempF: number, humidity: number, windSpeed: number) {
     this.city = city;
     this.date = date;
     this.icon = icon;
     this.iconDescription = iconDescription;
-    this.temperature = temperature;
+    this.tempF = tempF;
     this.humidity = humidity;
     this.windSpeed = windSpeed;
   }
@@ -31,8 +31,8 @@ class WeatherService {
   private cityName: string;
 
   constructor() {
-    this.baseURL = process.env.WEATHER_API_URL || '';
-    this.apiKey = process.env.WEATHER_API_KEY || '';
+    this.baseURL = process.env.API_BASE_URL || '';
+    this.apiKey = process.env.API_KEY || '';
     this.cityName = '';
   }
 
@@ -54,10 +54,10 @@ class WeatherService {
   }
  
   private buildWeatherQuery(coordinates: Coordinates): string {
-    return `${this.baseURL}/data/2.5/weather?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${this.apiKey}`;
+    return `${this.baseURL}/data/2.5/weather?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${this.apiKey}&units=imperial`;
   }
   private buildForecastQuery(coordinates: Coordinates): string {
-    return `${this.baseURL}/data/2.5/forecast?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${this.apiKey}`;
+    return `${this.baseURL}/data/2.5/forecast?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${this.apiKey}&units=imperial`;
   }
  
   private async fetchAndDestructureLocationData() {
@@ -93,7 +93,9 @@ class WeatherService {
       data.wind.speed,
       data.weather[0].icon,
       data.weather[0].description,
-    ));
+    ),
+    console.log(weatherData)
+  );
   }
   // TODO: Complete getWeatherForCity method
   async getWeatherForCity(city: string) {
@@ -102,7 +104,9 @@ class WeatherService {
     const weatherData = await this.fetchWeatherData(coordinates);
     const response = await fetch(this.buildForecastQuery(coordinates));
     const data = await response.json();
-    const chosenData = data.list.filter((weather: any) => weather.dt_txt.includes(weatherData.date));
+    const chosenData = data.list.filter((weather: any) => { 
+      return weather.dt_txt.includes("12:00:00")
+    });
     const forecastArray = this.buildForecastArray(weatherData, chosenData);
     return [weatherData, ...forecastArray];
   }
