@@ -94,7 +94,7 @@ class WeatherService {
       data.weather[0].icon,
       data.weather[0].description,
     ),
-    console.log(weatherData)
+    // console.log(weatherData)
   );
   }
   // TODO: Complete getWeatherForCity method
