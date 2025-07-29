@@ -97,7 +97,7 @@ class WeatherService {
     // console.log(weatherData)
   );
   }
-  // TODO: Complete getWeatherForCity method
+  // This method fetches the weather data for a given city
   async getWeatherForCity(city: string) {
     this.cityName = city;
     const coordinates = await this.fetchAndDestructureLocationData();

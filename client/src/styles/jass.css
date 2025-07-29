@@ -1866,6 +1866,9 @@ label form [type='radio'] {
 .weather-img {
   border-style: none;
   vertical-align: middle;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 
 .history-btn {
